@@ -1,0 +1,42 @@
+<project name="yii-project-template" default="deploy" basedir="." >
+
+	<property file="build.properties" />
+	<property name="css.dir" location="www/css/"/>
+	<property name="less.dir" location="less/"/>
+	
+
+	<property name="www" location="www/" />
+	<property name="protected" location="protected/" />
+
+	<target name="clean-less">
+		<delete file="${css.dir}/${less.compile.file}.css"/>
+		<echo>The compiled LESS file was successfully deleted.</echo>
+	</target>
+	
+	<target name="less" description="Convert LESS to CSS">
+		<exec executable="${node.dir}">
+			<arg line="${lessc.dir} ${less.dir}/${less.compile.file}.less ${css.dir}/${less.compile.file}.css" />
+		</exec>
+		<echo>LESS successfully compiled.</echo>
+	</target>
+
+	<target name="deploy" description="deploy to server">
+		<copy todir="${www.dir}">
+			<fileset dir="${www}" />
+		</copy>
+		<copy todir="${protected.dir}">
+			<fileset dir="${protected}" />
+		</copy>
+		<echo>All files were successfully copied to the deploy dirs.</echo>
+	</target>
+
+	<target name="clean" description="clean up">
+		<delete includeEmptyDirs="true">
+			<fileset dir="${www.dir}" includes="**/*" defaultexcludes="no" />
+		</delete>
+		<delete includeEmptyDirs="true">
+			<fileset dir="${protected.dir}" includes="**/*" defaultexcludes="no" />
+		</delete>
+		<echo>All files were successfully deleted.</echo>
+	</target>
+</project>
