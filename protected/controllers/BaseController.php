@@ -14,7 +14,13 @@ class BaseController extends Controller
 	 */
 	public function init()
 	{
-		
+		Yii::import('ext.LangPick.ELangPick');
+		ELangPick::setLanguage();
+		parent::init();
+		Yii::app()->getClientScript()->coreScriptPosition = CClientScript::POS_END;
+		Yii::app()->getClientScript()->defaultScriptPosition = CClientScript::POS_END;
+		Yii::app()->getClientScript()->defaultScriptFilePosition = CClientScript::POS_END;
+		Yii::app()->clientScript->scriptMap['jquery.js'] = false;
 	}
 	
 	/**

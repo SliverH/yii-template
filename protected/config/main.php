@@ -9,6 +9,11 @@ return array(
 	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
 	'name'=>'Yii Project Template',
 
+	/*
+	 * 
+	 */
+	'sourceLanguage'=>'00',
+		
 	// preloading 'log' component
 	'preload'=>array('log'),
 
