@@ -1,26 +1,45 @@
-<project name="yii-project-template" default="deploy" basedir="." >
+<project name="yii-project-template" default="deploy" basedir=".">
 
 	<property file="build.properties" />
-	<property name="css.dir" location="www/css/"/>
-	<property name="less.dir" location="less/"/>
-	
 
 	<property name="www" location="www/" />
+	<property name="css.dir" location="${www}/css/" />
+	<property name="less.dir" location="less/" />
 	<property name="protected" location="protected/" />
+	<property name="less.css" location="${css.dir}/less.css" />
+	<property name="base.css" location="${css.dir}/base.css" />
 
 	<target name="clean-less">
-		<delete file="${css.dir}/${less.compile.file}.css"/>
+		<delete file="${css.dir}/${less.compile.file}.css" />
 		<echo>The compiled LESS file was successfully deleted.</echo>
 	</target>
-	
-	<target name="less" description="Convert LESS to CSS">
+
+	<target name="compile-less"
+		description="Convert LESS to CSS">
 		<exec executable="${node.dir}">
-			<arg line="${lessc.dir} ${less.dir}/${less.compile.file}.less ${css.dir}/${less.compile.file}.css" />
+			<arg line="${lessc.dir} ${less.dir}/${less.compile.file}.less ${less.css}" />
 		</exec>
+
+		<concat destfile="${css.dir}/${less.compile.file}.css">
+			<filelist dir="${css.dir}" files="${base.css}, ${less.css}" />
+		</concat>
+
 		<echo>LESS successfully compiled.</echo>
 	</target>
 
-	<target name="deploy" description="deploy to server">
+	<target name="merge-less" 
+		depends="compile-less"
+		description="Merge less.css (compiled less) and base.css">
+		<concat destfile="${css.dir}/${less.compile.file}.css">
+			<filelist dir="${css.dir}" files="${base.css}, ${less.css}" />
+		</concat>
+
+		<echo>less.css successfully merged with base.css into main.css.</echo>
+	</target>
+
+	<target name="deploy" 
+		depends="merge-less"
+		description="deploy to server">
 		<copy todir="${www.dir}">
 			<fileset dir="${www}" />
 		</copy>
